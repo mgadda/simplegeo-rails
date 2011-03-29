@@ -1,24 +1,7 @@
 module SimpleGeo
   module Rails
     class Place
-      def initialize(attrs=nil)
-        self.attributes = attrs
-        @persisted = false
-        @destroyed = false    
-      end
-
-      PLACE_ATTRIBUTES = [:id, :name, :url, :owner, :type, :classifier_type, :category, 
-                          :subcategory, :address_attributes, :address, :phone,
-                          :lat, :long]  
-  
-      def attributes=(attrs)
-        @attributes = HashWithIndifferentAccess.new(attrs)
-      end
-  
-      def attributes
-        @attributes ||= HashWithIndifferentAccess.new
-      end
-  
+            
       extend ActiveModel::Naming
   
       include ActiveModel::Validations
@@ -37,6 +20,33 @@ module SimpleGeo
   
       # http://api.rubyonrails.org/classes/ActiveModel/Dirty.html
       include ActiveModel::Dirty
+
+
+      def initialize(attrs=nil)
+        self.attributes = attrs
+        @persisted = false
+        @destroyed = false    
+      end
+
+      PLACE_ATTRIBUTES = [:id, :name, :url, :owner, :type, :classifier_type, :category, 
+                          :subcategory, :address_attributes, :address, :phone,
+                          :lat, :long]  
+  
+      def attributes=(attrs)
+        @attributes = HashWithIndifferentAccess.new(attrs)
+        if !@attributes.has_key?(:address) || (@attributes.has_key?(:address) && !@attributes[:address].kind_of?(OpenStruct))
+          if @attributes[:address].kind_of?(Hash)
+            @attributes[:address] = OpenStruct.new(@attributes[:address])
+          else
+            @attributes[:address] = OpenStruct.new
+          end
+          
+        end
+      end
+  
+      def attributes
+        @attributes
+      end
   
       attr_accessor *PLACE_ATTRIBUTES
   
@@ -51,26 +61,13 @@ module SimpleGeo
           self.attributes[attribute] = val
         end
       end
-  
+      
+      def address_attributes=(attrs)
+        self.address = OpenStruct.new(attrs)
+      end
+      
       validates_presence_of :name, :lat, :long, :type
   
-      #  def address_attributes=(attributes)
-      #    name_will_change! unless self.address == Address.new(attributes)
-      #    self.attributes['address'] = Address.new(attributes)
-      #  end
-      #  
-      #  def address_attributes
-      #    self.attributes['address'].attributes
-      #  end
-      #  
-      #  def address=(addr)
-      #    name_will_change! unless self.address == addr
-      #    self.attributes['address'] = addr
-      #  end
-      #  
-      #  def address
-      #    self.attributes['address']
-      #  end
       def new_record?
         !@persisted
       end
@@ -147,7 +144,12 @@ module SimpleGeo
       end
       # method to clear out nils
       # method which generates hash but includes only changed fields
-  
+      
+      def serializable_hash(options=nil)
+        hash = super(options)
+        hash["address"] = self.address.as_json["table"]
+        hash
+      end
       def as_geojson
         # Generate hash for values that have changed only (even to nil or blank)
         json = {}
@@ -276,7 +278,7 @@ module SimpleGeo
               self.subcategory = classifier[:type]
             end
         
-            self.address = Address.new(:street => record.properties[:address],
+            self.address = OpenStruct.new(:street => record.properties[:address],
                                        :city => record.properties[:city],
                                        :state => record.properties[:province],
                                        :country => record.properties[:country],
@@ -312,7 +314,7 @@ module SimpleGeo
               self.subcategory = classifier[:type]
         
               # Address
-              self.address = Address.new(:street => props[:address],
+              self.address = OpenStruct.new(:street => props[:address],
                                          :city => props[:city],
                                          :state => props[:province],
                                          :country => props[:country],
