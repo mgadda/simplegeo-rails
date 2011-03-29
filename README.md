@@ -57,7 +57,7 @@ Creating Places
 Destroying Places
 -----------------
 
-  place = SimpleGeo::Rails::Place.find('<some id>')
-  place.delete
+    place = SimpleGeo::Rails::Place.find('<some id>')
+    place.delete
   
   
