@@ -3,6 +3,12 @@ Usage
 
 This gem consists of one class: SimpleGeo::Rails::Place. Its called Place because the term Feature doesn't exactly make me think of a place. Hopefully others agree.
 
+In your development.rb, staging.rb, production.rb, etc, add the following:
+
+    app.config.simplegeo.oauth_key = 'your_oauth_key'
+    app.config.simplegeo.oauth_key = 'your_oauth_secret'
+
+    
 Finding Places
 --------------
 
