@@ -309,10 +309,12 @@ module SimpleGeo
               # Classifiers
               classifier = props[:classifiers].first
         
-              self.classifier_type = classifier[:type]
-              self.category = classifier[:category]
-              self.subcategory = classifier[:type]
-        
+              if classifier.present?
+                self.classifier_type = classifier[:type]
+                self.category = classifier[:category]
+                self.subcategory = classifier[:type]
+              end
+              
               # Address
               self.address = OpenStruct.new(:street => props[:address],
                                          :city => props[:city],
