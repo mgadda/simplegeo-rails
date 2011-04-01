@@ -210,10 +210,7 @@ module SimpleGeo
       end
   
       class << self
-        def to_s
-          "Place(#{PLACE_ATTRIBUTES.join(':string, ')})"
-        end
-    
+            
         def find(id)
           from_record(SimpleGeo::Client.get_feature(id))
         end
