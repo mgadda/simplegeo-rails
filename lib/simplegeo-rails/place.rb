@@ -246,7 +246,19 @@ module SimpleGeo
         # rescue
         #       nil
         end
-    
+        
+        def create(attrs={})
+          returning(Place.new(attrs)) do |place|
+            place.save
+          end
+        end
+        
+        def create!(attrs={})
+          returning(Place.new(attrs)) do |place|
+            Place.new(attrs).save!
+          end          
+        end
+        
         def from_record(record)
           return nil unless record.kind_of?(SimpleGeo::Record)
       
