@@ -2,24 +2,24 @@ module SimpleGeo
   module Rails
     class Place
             
-      extend ActiveModel::Naming
+      extend ::ActiveModel::Naming
   
-      include ActiveModel::Validations
+      include ::ActiveModel::Validations
   
       # http://api.rubyonrails.org/classes/ActiveModel/AttributeMethods.html
-      include ActiveModel::AttributeMethods
+      include ::ActiveModel::AttributeMethods
   
       # http://api.rubyonrails.org/classes/ActiveModel/Callbacks.html
-      extend ActiveModel::Callbacks
+      extend ::ActiveModel::Callbacks
   
       # http://api.rubyonrails.org/classes/ActiveModel/Conversion.html
-      include ActiveModel::Conversion
+      include ::ActiveModel::Conversion
   
       # http://api.rubyonrails.org/classes/ActiveModel/Serialization.html
-      include ActiveModel::Serializers::JSON
+      include ::ActiveModel::Serializers::JSON
   
       # http://api.rubyonrails.org/classes/ActiveModel/Dirty.html
-      include ActiveModel::Dirty
+      include ::ActiveModel::Dirty
 
 
       def initialize(attrs=nil)
