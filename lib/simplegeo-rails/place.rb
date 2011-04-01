@@ -207,22 +207,6 @@ module SimpleGeo
     
         json[:private] = true
         json
-    
-        # {
-        #       :id => id,
-        #       :type => type,
-        #       :properties => {
-        #         :province => address.try(:state),
-        #         :city => address.try(:city),
-        #         :name => name,
-        #         :country => address.try(:country),
-        #         :classififers => [:type => classifier_type, :category => category, :subcategory => subcategory],
-        #         :phone => phone,
-        #         :address => address.try(:street),
-        #         :owner => owner,
-        #         :postcode => address.try(:postal_code)
-        #       }
-        #     }    
       end
   
       class << self
