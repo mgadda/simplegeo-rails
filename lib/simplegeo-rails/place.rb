@@ -99,6 +99,10 @@ module SimpleGeo
     
         @previously_changed = changes
         @changed_attributes.clear
+        true
+        
+      rescue
+        false
       end
   
       def update
@@ -109,6 +113,10 @@ module SimpleGeo
 
         @previously_changed = changes
         @changed_attributes.clear    
+        true
+        
+      rescue
+        false
       end
   
       # Returns true if this object hasn't been saved yet -- that is, a record
