@@ -30,7 +30,7 @@ module SimpleGeo
 
       PLACE_ATTRIBUTES = [:id, :name, :url, :owner, :type, :classifier_type, :category, 
                           :subcategory, :address_attributes, :address, :phone,
-                          :lat, :long]  
+                          :lat, :long, :record_id]  
   
       def attributes=(attrs)
         @attributes = HashWithIndifferentAccess.new(attrs)
@@ -173,6 +173,9 @@ module SimpleGeo
     
         json[:id] = id unless new_record?
     
+        json[:properties] ||= {}
+        json[:properties][:record_id] = record_id unless record_id.blank?
+        
         if address.present? && (address.changed? || new_record?)
           json[:properties] ||= {}
           json[:properties][:province] = address.state if (address.state_changed? || (new_record? && address.try(:state).present?))
@@ -181,8 +184,7 @@ module SimpleGeo
           json[:properties][:address] = address.street if (address.street_changed? || (new_record? && address.try(:street).present?))
           json[:properties][:postcode] = address.postal_code if (address.postal_code_changed? || (new_record? && address.try(:postal_code).present?))
         end
-    
-        json[:properties] ||= {}
+        
         json[:properties][:phone] = phone if (phone_changed? || (new_record? && phone.present?))
         json[:properties][:owner] = owner if (owner_changed? || (new_record? && owner.present?))
 
@@ -263,6 +265,7 @@ module SimpleGeo
       
           Place.new.instance_eval do
             self.attributes['id'] = record.id
+            self.record_id = record.properties[:record_id]
             self.lat = record.lat
             self.long = record.lon
             self.type = record.type || 'Feature'
@@ -300,6 +303,8 @@ module SimpleGeo
               self.attributes['id'] = feature[:id]
               props = feature[:properties]
         
+              self.record_id = props[:record_id]
+              
               # General Properties
               self.name = props[:name]
               self.url = props[:url]
