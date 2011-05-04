@@ -137,13 +137,13 @@ module SimpleGeo
   
       def reload
         @changed_attributes.clear
-        self.attributes = self.class.find(self.id).attributes
+        self.attributes = self.class.find(self.id.split('@').shift).attributes
         self
       end
   
       def destroy
         if persisted?
-          SimpleGeo::Client.delete(SimpleGeo::Endpoint.feature(self.id))
+          SimpleGeo::Client.delete(SimpleGeo::Endpoint.feature(self.id.split('@').shift))
         end
 
         @destroyed = true    
@@ -171,7 +171,7 @@ module SimpleGeo
           json[:geometry] = {:coordinates => [long, lat]}
         end
     
-        json[:id] = id unless new_record?
+        json[:id] = id.split('@').shift unless new_record?
     
         json[:properties] ||= {}
         json[:properties][:record_id] = record_id unless record_id.blank?
