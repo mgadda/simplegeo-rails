@@ -106,10 +106,9 @@ module SimpleGeo
       end
   
       def update
-        updated_feature = SimpleGeo::Client.put(SimpleGeo::Endpoint.feature(self.id), as_geojson)
-
-        self.id = new_feature['id']
-        reload
+        # should be SimpleGeo::Client.put, but simplegeo doesn't comply with Rest
+        # despite what their document indicates
+        SimpleGeo::Client.post(SimpleGeo::Endpoint.feature(self.id.split('@').shift), as_geojson)
 
         @previously_changed = changes
         @changed_attributes.clear    
