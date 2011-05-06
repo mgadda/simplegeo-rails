@@ -325,7 +325,8 @@ module SimpleGeo
                                          :city => props[:city],
                                          :state => props[:province],
                                          :country => props[:country],
-                                         :postal_code => props[:postcode])
+                                         :postal_code => props[:postcode], 
+                                         :place_id => self.id)
 
               @persisted = true
               self
