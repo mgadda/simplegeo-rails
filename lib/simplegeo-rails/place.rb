@@ -197,13 +197,13 @@ module SimpleGeo
         if category_changed? || (new_record? && category.present?)
           json[:properties][:classifiers] = []
           json[:properties][:classifiers] << {}
-          json[:properties][:classifiers].first[:type] = category
+          json[:properties][:classifiers].first[:category] = category
         end
     
         if subcategory_changed? || (new_record? && subcategory.present?)
           json[:properties][:classifiers] = []
           json[:properties][:classifiers] << {}
-          json[:properties][:classifiers].first[:type] = subcategory
+          json[:properties][:classifiers].first[:subcategory] = subcategory
         end
     
         json[:private] = true
@@ -278,7 +278,7 @@ module SimpleGeo
             if classifier.present?
               self.classifier_type = classifier[:type]
               self.category = classifier[:category]
-              self.subcategory = classifier[:type]
+              self.subcategory = classifier[:subcategory]
             end
         
             self.address = OpenStruct.new(:street => record.properties[:address],
@@ -317,7 +317,7 @@ module SimpleGeo
               if classifier.present?
                 self.classifier_type = classifier[:type]
                 self.category = classifier[:category]
-                self.subcategory = classifier[:type]
+                self.subcategory = classifier[:subcategory]
               end
               
               # Address
