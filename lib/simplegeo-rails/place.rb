@@ -1,7 +1,8 @@
 module SimpleGeo
   module Rails
     class Place
-            
+      cattr_accessor :sg_private
+      
       extend ::ActiveModel::Naming
   
       include ::ActiveModel::Validations
@@ -157,6 +158,7 @@ module SimpleGeo
         hash["address"] = self.address.as_json["table"]
         hash
       end
+
       def as_geojson
         # Generate hash for values that have changed only (even to nil or blank)
         json = {}
@@ -206,7 +208,7 @@ module SimpleGeo
           json[:properties][:classifiers].first[:subcategory] = subcategory
         end
     
-        json[:private] = true
+        json[:private] = @@sg_private
         json
       end
   

@@ -7,6 +7,7 @@ module SimpleGeo
       
       initializer "simplegeo.set_configs" do |app|
         SimpleGeo::Client.set_credentials(app.config.simplegeo.oauth_key, app.config.simplegeo.oauth_secret)
+        SimpleGeo::Rails::Place.sg_private = app.config.simplegeo.sg_private || false
       end
     end
   end
