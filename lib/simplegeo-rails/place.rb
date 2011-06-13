@@ -67,6 +67,10 @@ module SimpleGeo
         self.address = OpenStruct.new(attrs)
       end
       
+      def id
+        @attributes[:id].split('@').shift
+      end
+      
       validates_presence_of :name, :lat, :long, :type
   
       def new_record?
