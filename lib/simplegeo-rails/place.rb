@@ -68,7 +68,7 @@ module SimpleGeo
       end
       
       def id
-        @attributes[:id].split('@').shift
+        self.attributes[:id].split('@').shift if self.attributes[:id].present?
       end
       
       validates_presence_of :name, :lat, :long, :type
